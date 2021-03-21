@@ -1,6 +1,7 @@
 package com.example.mymidi;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.media.midi.MidiDevice;
@@ -32,12 +33,13 @@ public class MainActivity extends AppCompatActivity {
     MidiOutputPort outputPort;
     TextView myData, tv_byte;
     Button btn;     //임시 버튼
-
     int[] midiData = new int[5];String receivedDataString;
 
-    SoundPool spool, spool2;  // spool은 건반 1개당 1개씩 필요하므로 실제론 88개가 필요함.<배열로 정의 가능
-    int key, key2;          // spool에 할당된 오디오 파일을 구분할 키값
 
+
+    SoundPool spool, spool2, spools;  // spool은 건반 1개당 1개씩 필요하므로 실제론 88개가 필요함.<배열로 정의 가능
+    int key, key2, keys[];          // spool에 할당된 오디오 파일을 구분할 키값
+    static Context context;
     final protected static char[] hexArray="0123456789ABCDEF".toCharArray();
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
@@ -49,14 +51,17 @@ public class MainActivity extends AppCompatActivity {
         tv_byte=(TextView)findViewById(R.id.tv_byte);       //임시_미디 신호에서 파싱한 값을 보여줄 텍스트뷰
         m=(MidiManager)getApplicationContext().getSystemService(Context.MIDI_SERVICE);
         MidiDeviceInfo[] infos=m.getDevices();
-
+        context=getApplicationContext();
 
         spool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
         spool2= new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+
+
         key = spool.load(this, R.raw.ride,1);
         key2= spool2.load(this, R.raw.crash, 1);
+        keys= new int[88];
 
-
+        spools=SoundSelector.load(keys,0,context );
 
 
         m.registerDeviceCallback(new MidiManager.DeviceCallback() {      // 실시간으로 장치가 연결되거나 해제되면 알림
@@ -76,15 +81,19 @@ public class MainActivity extends AppCompatActivity {
                                             for( byte b : data)
                                                 sb.append(String.format("%02x", b&0xff));           // 받은 데이터를 헥스 문자열로 변환
                                             receivedDataString=sb.toString().substring(0,20);       // 문자열 뒤쪽 필요없는 데이터 거름
-                                            if(receivedDataString.substring(0,3).equals("019")) { // 임시_입력받은 데이터가 건반 누름 신호인지 확인 // 소리 재생 테스트!!!
-                                                if(receivedDataString.substring(4,6).equals("3c"))  // 가온 도를 눌렀을 경우
-                                                    spool.play(key,1,1,0,0,1);
+                                            CheckData.CheckNote(receivedDataString,spools,keys);
+                                            /*if(receivedDataString.substring(0,3).equals("019")) { // 임시_입력받은 데이터가 건반 누름 신호인지 확인 // 소리 재생 테스트!!!
+                                                if(receivedDataString.substring(4,6).equals("3c")) {  // 가온 도를 눌렀을 경우
+                                                    //spool.play(key,1,1,0,0,1);
+                                                    //PlayNote.noteOn(spools[0], key, 10);
+                                                }
                                                 else                    //  도 아닐경우
                                                     spool2.play(key2, 1, 1, 0, 0, 1);
                                             }
                                             else if(receivedDataString.substring(0,3).equals("018")){  // 입력받은 데이터가 건반을 떼는 신호인지 확인
-                                                spool.autoPause();  // 같은 spool을 다른 건반에 사용하면 두 건반을 누르고 한 건반만 떼도 둘 다 소리가 멈추므로 건반별로 spool을 생성해야함
-                                            }
+                                                //spool.autoPause();  // 같은 spool을 다른 건반에 사용하면 두 건반을 누르고 한 건반만 떼도 둘 다 소리가 멈추므로 건반별로 spool을 생성해야함
+                                                //PlayNote.noteOff(spools[60], 60);
+                                            }*/
                                         }
                                     }
                                     outputPort=device.openOutputPort(0);    // 미디 아웃 포트 열기
