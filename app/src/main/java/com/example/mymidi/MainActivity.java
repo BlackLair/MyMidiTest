@@ -29,18 +29,16 @@ import static android.os.Looper.loop;
 public class MainActivity extends AppCompatActivity {
     static final String TAG = "mymidi";
     MidiManager m;
-    int numOutputs;
     MidiOutputPort outputPort;
     TextView myData, tv_byte;
     Button btn;     //임시 버튼
-    int[] midiData = new int[5];String receivedDataString;
+    String receivedDataString;
 
 
 
-    SoundPool spool, spool2, spools;  // spool은 건반 1개당 1개씩 필요하므로 실제론 88개가 필요함.<배열로 정의 가능
-    int key, key2, keys[];          // spool에 할당된 오디오 파일을 구분할 키값
+    SoundPool spools;  // spool은 건반 1개당 1개씩 필요하므로 실제론 88개가 필요함.<배열로 정의 가능
+    int keys[];          // spool에 할당된 오디오 파일을 구분할 키값
     static Context context;
-    final protected static char[] hexArray="0123456789ABCDEF".toCharArray();
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +51,10 @@ public class MainActivity extends AppCompatActivity {
         MidiDeviceInfo[] infos=m.getDevices();
         context=getApplicationContext();
 
-        spool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
-        spool2= new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
 
 
-        key = spool.load(this, R.raw.ride,1);
-        key2= spool2.load(this, R.raw.crash, 1);
+
+
         keys= new int[88];
 
         spools=SoundSelector.load(keys,0,context );
