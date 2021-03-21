@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"device removed", Toast.LENGTH_SHORT).show();
 
             }
-        }, Handler.createAsync(Looper.getMainLooper()));
+        }, Handler.createAsync(Looper.getMainLooper()));  // createAsync는 API 28 필요
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
