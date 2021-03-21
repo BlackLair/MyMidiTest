@@ -6,25 +6,25 @@ import android.widget.Toast;
 import java.util.Stack;
 
 public class CheckData {
-    static int pedalFlag;
-    static int[] isKeyOn=new int[89];
+    static int pedalFlag;           // 0 : 페달 뗌   1 : 페달 밟음
+    static int[] isKeyOn=new int[89];  // 0 : 건반 뗀 상태 1 : 건반 누른 상태  2 : 페달 밟는 도중에 건반 뗀 상태
     public static void CheckNote(String receivedDataString, SoundPool spools, int[] keys){
         int pitch;
         float velocity;
         int[] flag= new int[89];     // 이중 입력 방지
 
 
-        //       int[] isKeyOn=new int[89] ;
-        // 0 : 건반 뗀 상태 1 : 건반 누른 상태  2 : 페달 밟는 도중에 건반 뗀 상태
+
+
 
         pitch=getPitch(receivedDataString);
         velocity=getVelocity(receivedDataString);
-        //for(int i=0; i<88; i++) isKeyOn[i]=0;
 
 
 
 
-     /*   if (flag[pitch]==0) {*/
+
+
              if(receivedDataString.substring(0,8).equals("01b0407f")) { // 페달 밟았을 때
                  pedalFlag = 1;
              }
@@ -38,11 +38,13 @@ public class CheckData {
                  }
              }
              if (receivedDataString.substring(0, 3).equals("019")) { // 건반 눌렀을 때
-                 if(isKeyOn[pitch]==2)
+                 if(isKeyOn[pitch]==2) {
                      PlayNote.noteOff(spools, keys[pitch]);
-                 if(flag[pitch]==0) {
+                     isKeyOn[pitch]=0;
+                 }
+                 if(isKeyOn[pitch]==0) {
                      PlayNote.noteOn(spools, keys[pitch], velocity);
-                     flag[pitch] = 1;
+
                  }
                  else
                      flag[pitch]=0;
@@ -56,10 +58,7 @@ public class CheckData {
                      isKeyOn[pitch] = 2;  //페달 밟은 상태로 건반 뗐을 때
                  }
              }
-            /* flag[pitch]=1;
-        }
-        else
-            flag[pitch]=0;*/
+
     }
 
     public static int getPitch(String receivedDataString){
