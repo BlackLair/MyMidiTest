@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     static SoundPool spools;  // spool은 건반 1개당 1개씩 필요하므로 실제론 88개가 필요함.<배열로 정의 가능
     static int keys[];          // spool에 할당된 오디오 파일을 구분할 키값
-    static Context context;
+    Context context;
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
     protected void onCreate(Bundle savedInstanceState) {

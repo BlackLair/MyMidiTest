@@ -10,8 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 public class SoundSelector extends AppCompatActivity {
     static int myIds[]= new int[89];;
     public static SoundPool load(int[] keys, int selected, Context context) {      // selected 0 : piano 1 : violin
-        SoundPool spools;
-        spools = new SoundPool(256, AudioManager.STREAM_MUSIC, 0);
+        SoundPool spools=null;
+    //    spools = new SoundPool(256, AudioManager.STREAM_MUSIC, 0);
         for (int i = 0; i < 88; i++) {
 
             if(i<9)
@@ -20,18 +20,16 @@ public class SoundSelector extends AppCompatActivity {
                 myIds[i]=context.getResources().getIdentifier("@raw/p"+Integer.toString(i+1),"raw",context.getPackageName());
         }
 
-/*
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {               // API 21 이후
             AudioAttributes audioAttributes = new AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_GAME)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                     .build();
-            for (int i = 0; i < 88; i++)
-                spools[i] = new SoundPool.Builder().setAudioAttributes(audioAttributes).setMaxStreams(8).build();
-        } else {
-            for (int i = 0; i < 88; i++)
-                spools[i] = new SoundPool(8, AudioManager.STREAM_NOTIFICATION, 0);
-        }*/
+                spools = new SoundPool.Builder().setAudioAttributes(audioAttributes).setMaxStreams(256).build();
+        } else {                // API 21 미만
+                spools = new SoundPool(256, AudioManager.STREAM_NOTIFICATION, 0);
+        }
 
 
 
