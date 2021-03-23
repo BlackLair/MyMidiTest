@@ -20,7 +20,7 @@ public class CheckData {
 
         pitch=getPitch(receivedDataString);
         velocity=getVelocity(receivedDataString);
-        velocity=(velocity * velocity); // 일정 볼륨 이상은 소리크기가 비슷비슷해져서 2차함수 그래프 형식으로 볼륨크기 조절
+        velocity=(velocity * velocity)+(float)0.015; // 일정 볼륨 이상은 소리크기가 비슷비슷해져서 2차함수 그래프 형식으로 볼륨크기 조절
 
 
 
