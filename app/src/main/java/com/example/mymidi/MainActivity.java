@@ -36,8 +36,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    SoundPool spools;  // spool은 건반 1개당 1개씩 필요하므로 실제론 88개가 필요함.<배열로 정의 가능
-    int keys[];          // spool에 할당된 오디오 파일을 구분할 키값
+    static SoundPool spools;  // spool은 건반 1개당 1개씩 필요하므로 실제론 88개가 필요함.<배열로 정의 가능
+    static int keys[];          // spool에 할당된 오디오 파일을 구분할 키값
     static Context context;
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
@@ -71,27 +71,7 @@ public class MainActivity extends AppCompatActivity {
                                 if(device==null){
                                     Log.e(TAG, "Could not open device"+info);
                                 }else{
-                                    class MyReceiver extends MidiReceiver {     //리시버 클래스
-                                        public void onSend(byte[] data, int offset, int count, long timestamp) throws IOException{
-                                            StringBuilder sb=new StringBuilder();
-                                            for( byte b : data)
-                                                sb.append(String.format("%02x", b&0xff));           // 받은 데이터를 헥스 문자열로 변환
-                                            receivedDataString=sb.toString().substring(0,20);       // 문자열 뒤쪽 필요없는 데이터 거름
-                                            CheckData.CheckNote(receivedDataString,spools,keys);
-                                            /*if(receivedDataString.substring(0,3).equals("019")) { // 임시_입력받은 데이터가 건반 누름 신호인지 확인 // 소리 재생 테스트!!!
-                                                if(receivedDataString.substring(4,6).equals("3c")) {  // 가온 도를 눌렀을 경우
-                                                    //spool.play(key,1,1,0,0,1);
-                                                    //PlayNote.noteOn(spools[0], key, 10);
-                                                }
-                                                else                    //  도 아닐경우
-                                                    spool2.play(key2, 1, 1, 0, 0, 1);
-                                            }
-                                            else if(receivedDataString.substring(0,3).equals("018")){  // 입력받은 데이터가 건반을 떼는 신호인지 확인
-                                                //spool.autoPause();  // 같은 spool을 다른 건반에 사용하면 두 건반을 누르고 한 건반만 떼도 둘 다 소리가 멈추므로 건반별로 spool을 생성해야함
-                                                //PlayNote.noteOff(spools[60], 60);
-                                            }*/
-                                        }
-                                    }
+
                                     outputPort=device.openOutputPort(0);    // 미디 아웃 포트 열기
                                     outputPort.connect(new MyReceiver());       // 포트로 리시버 연결
                                 }

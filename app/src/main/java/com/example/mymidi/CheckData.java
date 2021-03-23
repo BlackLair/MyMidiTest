@@ -6,12 +6,13 @@ import android.widget.Toast;
 import java.util.Stack;
 
 public class CheckData {
-    static int pedalFlag;           // 0 : 페달 뗌   1 : 페달 밟음
+    static int pedalFlag=0;           // 0 : 페달 뗌   1 : 페달 밟음
     static int[] isKeyOn=new int[89];  // 0 : 건반 뗀 상태 1 : 건반 누른 상태  2 : 페달 밟는 도중에 건반 뗀 상태
+    static Stack<Integer> relNote = new Stack<>();
     public static void CheckNote(String receivedDataString, SoundPool spools, int[] keys){
         int pitch;
         float velocity;
-        int[] flag= new int[89];     // 이중 입력 방지
+//        int[] flag= new int[89];     // 이중 입력 방지
 
 
 
@@ -24,40 +25,42 @@ public class CheckData {
 
 
 
+        if(receivedDataString.substring(0,3).equals("01b")) {   //페달 신호
+            if (receivedDataString.substring(0, 8).equals("01b0407f")) { // 페달 밟았을 때
+                pedalFlag = 1;
+            } else if (receivedDataString.substring(0, 8).equals("01b04000")) { //페달 뗐을 때
+                pedalFlag = 0;
+                while(!relNote.empty()){
+                    int pit=relNote.pop();
+                    if(isKeyOn[pit]!=1) { // 페달 밟는 중 두 번째 눌려있는 상태의 건반은 소리를 지속시키기 위함.
+                        isKeyOn[pit] = 0;
+                        PlayNote.noteOff(spools, keys[pit]);
+                    }
+                }
+            }
+        }
 
-             if(receivedDataString.substring(0,8).equals("01b0407f")) { // 페달 밟았을 때
-                 pedalFlag = 1;
-             }
-             else if(receivedDataString.substring(0,8).equals("01b04000")){ //페달 뗐을 때
-                 pedalFlag=0;
-                 for(int i=0; i<88; i++){
-                     if(isKeyOn[i]==2) {
-                         PlayNote.noteOff(spools, keys[i]);
-                         isKeyOn[i] = 0;
-                     }
-                 }
-             }
-             if (receivedDataString.substring(0, 3).equals("019")) { // 건반 눌렀을 때
-                 if(isKeyOn[pitch]==2) {
-                     PlayNote.noteOff(spools, keys[pitch]);
-                     isKeyOn[pitch]=0;
-                 }
-                 if(isKeyOn[pitch]==0) {
-                     PlayNote.noteOn(spools, keys[pitch], velocity);
+        else {                      //건반 신호
+            if (receivedDataString.substring(0, 3).equals("019")) { // 건반 눌렀을 때
+                if (isKeyOn[pitch] == 2) {
+                    PlayNote.noteOff(spools, keys[pitch]);
+                    isKeyOn[pitch] = 0;
+                }
+                if (isKeyOn[pitch] == 0) {
+                    PlayNote.noteOn(spools, keys[pitch], velocity);
+                    isKeyOn[pitch] = 1;
+                }
 
-                 }
-                 else
-                     flag[pitch]=0;
-                 isKeyOn[pitch]=1;
-             } else if (receivedDataString.substring(0, 3).equals("018")) { //건반 뗐을 때
-                 if(pedalFlag==0) {
-                     PlayNote.noteOff(spools, keys[pitch]);
-                     isKeyOn[pitch]=0;
-                 }
-                 else if(pedalFlag==1) {
-                     isKeyOn[pitch] = 2;  //페달 밟은 상태로 건반 뗐을 때
-                 }
-             }
+            } else if (receivedDataString.substring(0, 3).equals("018")) { //건반 뗐을 때
+                if (pedalFlag == 0) {
+                    PlayNote.noteOff(spools, keys[pitch]);
+                    isKeyOn[pitch] = 0;
+                } else if (pedalFlag == 1) {
+                    isKeyOn[pitch] = 2;  //페달 밟은 상태로 건반 뗐을 때
+                    relNote.push(pitch);
+                }
+            }
+        }
 
     }
 
