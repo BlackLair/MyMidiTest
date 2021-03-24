@@ -2,7 +2,9 @@ package com.example.mymidi;
 
 import android.content.Context;
 import android.media.AudioAttributes;
+import android.media.AudioFormat;
 import android.media.AudioManager;
+import android.media.AudioTrack;
 import android.media.SoundPool;
 import android.os.Build;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +28,7 @@ public class SoundSelector extends AppCompatActivity {
                     .setUsage(AudioAttributes.USAGE_GAME)
                     .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                     .build();
+
                 spools = new SoundPool.Builder().setAudioAttributes(audioAttributes).setMaxStreams(256).build();
         } else {                // API 21 미만
                 spools = new SoundPool(256, AudioManager.STREAM_NOTIFICATION, 0);

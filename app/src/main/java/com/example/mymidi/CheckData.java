@@ -7,6 +7,7 @@ import java.util.Stack;
 public class CheckData {
     static int pedalFlag=0;           // 0 : 페달 뗌   1 : 페달 밟음
     static int[] isKeyOn=new int[89];  // 0 : 건반 뗀 상태 1 : 건반 누른 상태  2 : 페달 밟는 도중에 건반 뗀 상태
+    static int initFlag=0;
     static Stack<Integer> relNote = new Stack<>();
     static String testString; // test 버튼 출력용
 
@@ -15,7 +16,11 @@ public class CheckData {
         int pitch;
         float velocity;
 
-
+        if(initFlag==0){
+            for(int i=0; i<89; i++)
+                isKeyOn[i]=0;
+            initFlag=1;
+        }
 
         pitch=getPitch(receivedDataString);
         velocity=getVelocity(receivedDataString);
@@ -44,7 +49,11 @@ public class CheckData {
                     PlayNote.noteOff(spools, keys[pitch]);
                     isKeyOn[pitch] = 0;
                 }
-                if (isKeyOn[pitch] == 0) {
+                if(velocity==0) {       // 건반을 놓을 때 off 신호가 아닌 on신호와 velocity 0을 이용하는 건반을 위한 로직
+                    PlayNote.noteOff(spools, keys[pitch]);
+                    isKeyOn[pitch]=0;
+                }
+                else if (isKeyOn[pitch] == 0) {
                     PlayNote.noteOn(spools, keys[pitch], velocity);
                     isKeyOn[pitch] = 1;
 
