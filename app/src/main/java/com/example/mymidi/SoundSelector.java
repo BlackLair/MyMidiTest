@@ -10,8 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 public class SoundSelector extends AppCompatActivity {
     static int myIds[]= new int[89];;
     public static SoundPool load(int[] keys, int selected, Context context) {      // selected 0 : piano 1 : violin
-        SoundPool spools=null;
-    //    spools = new SoundPool(256, AudioManager.STREAM_MUSIC, 0);
+        SoundPool spools;
+
         for (int i = 0; i < 88; i++) {
 
             if(i<9)

@@ -1,27 +1,20 @@
 package com.example.mymidi;
 
 import android.media.SoundPool;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
-import java.util.Stack;
-import android.content.Context;
 
-public class CheckData extends View {
+import java.util.Stack;
+
+public class CheckData {
     static int pedalFlag=0;           // 0 : 페달 뗌   1 : 페달 밟음
     static int[] isKeyOn=new int[89];  // 0 : 건반 뗀 상태 1 : 건반 누른 상태  2 : 페달 밟는 도중에 건반 뗀 상태
     static Stack<Integer> relNote = new Stack<>();
     static String testString; // test 버튼 출력용
-    public CheckData(Context context) {
-        super(context);
-    }
+
 
     public static void CheckNote(String receivedDataString, SoundPool spools, int[] keys){
         int pitch;
         float velocity;
 
-//        int[] flag= new int[89];     // 이중 입력 방지
 
 
         pitch=getPitch(receivedDataString);

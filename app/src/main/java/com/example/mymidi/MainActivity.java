@@ -22,9 +22,7 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.IOException;
 
-import static android.os.Looper.loop;
 
 
 public class MainActivity extends AppCompatActivity {
