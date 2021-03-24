@@ -26,31 +26,30 @@ import java.io.IOException;
 
 import static android.os.Looper.loop;
 
+
 public class MainActivity extends AppCompatActivity {
     static final String TAG = "mymidi";
     MidiManager m;
     MidiOutputPort outputPort;
     TextView myData, tv_byte;
     Button btn;     //임시 버튼
-    String receivedDataString;
-
 
 
     static SoundPool spools;  // spool은 건반 1개당 1개씩 필요하므로 실제론 88개가 필요함.<배열로 정의 가능
     static int keys[];          // spool에 할당된 오디오 파일을 구분할 키값
-    Context context;
+    static Context context;
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         myData=(TextView)findViewById(R.id.myData);
-        btn=(Button)findViewById(R.id.btn);             // 임시_누를 때마다 마지막 신호를 보여줄 버튼
+   //     btn=(Button)findViewById(R.id.btn);             // 임시_누를 때마다 마지막 신호를 보여줄 버튼
         tv_byte=(TextView)findViewById(R.id.tv_byte);       //임시_미디 신호에서 파싱한 값을 보여줄 텍스트뷰
         m=(MidiManager)getApplicationContext().getSystemService(Context.MIDI_SERVICE);
         MidiDeviceInfo[] infos=m.getDevices();
         context=getApplicationContext();
-
+        btn=findViewById(R.id.btn);
 
 
 
@@ -89,12 +88,13 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {   // 테스트 코드.  버튼을 누르면 마지막으로 받은 미디 신호를 hex코드로 출력(정렬안됨)
-                String myText;
-                myText=receivedDataString;
-                tv_byte.setText(myText);
+
+                tv_byte.setText(CheckData.testString);
             }
         });
     }
-
+    public static Context getAppContext(){
+        return MainActivity.context;
+    }
 
 }
