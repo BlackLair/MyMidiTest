@@ -82,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }, Handler.createAsync(Looper.getMainLooper()));  // createAsync는 API 28 필요
-
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {   // 테스트 코드.  버튼을 누르면 마지막으로 받은 미디 신호를 hex코드로 출력(정렬안됨)
