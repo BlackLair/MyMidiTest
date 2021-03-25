@@ -44,28 +44,29 @@ public class CheckData {
         }
 
         else {                      //건반 신호
-            if (receivedDataString.substring(0, 3).equals("019")) { // 건반 눌렀을 때
-                if (isKeyOn[pitch] == 2) {
-                    PlayNote.noteOff(spools, keys[pitch]);
-                    isKeyOn[pitch] = 0;
-                }
-                if(velocity==0) {       // 건반을 놓을 때 off 신호가 아닌 on신호와 velocity 0을 이용하는 건반을 위한 로직
-                    PlayNote.noteOff(spools, keys[pitch]);
-                    isKeyOn[pitch]=0;
-                }
-                else if (isKeyOn[pitch] == 0) {
-                    PlayNote.noteOn(spools, keys[pitch], velocity);
-                    isKeyOn[pitch] = 1;
+            if (pitch < 88 && pitch >=0) {
+                if (receivedDataString.substring(0, 3).equals("019")) { // 건반 눌렀을 때
+                    if (isKeyOn[pitch] == 2) {
+                        PlayNote.noteOff(spools, keys[pitch]);
+                        isKeyOn[pitch] = 0;
+                    }
+                    if (velocity == 0) {       // 건반을 놓을 때 off 신호가 아닌 on신호와 velocity 0을 이용하는 건반을 위한 로직
+                        PlayNote.noteOff(spools, keys[pitch]);
+                        isKeyOn[pitch] = 0;
+                    } else if (isKeyOn[pitch] == 0) {
+                        PlayNote.noteOn(spools, keys[pitch], velocity);
+                        isKeyOn[pitch] = 1;
 
-                }
+                    }
 
-            } else if (receivedDataString.substring(0, 3).equals("018")) { //건반 뗐을 때
-                if (pedalFlag == 0) {
-                    PlayNote.noteOff(spools, keys[pitch]);
-                    isKeyOn[pitch] = 0;
-                } else if (pedalFlag == 1) {
-                    isKeyOn[pitch] = 2;  //페달 밟은 상태로 건반 뗐을 때
-                    relNote.push(pitch);
+                } else if (receivedDataString.substring(0, 3).equals("018")) { //건반 뗐을 때
+                    if (pedalFlag == 0) {
+                        PlayNote.noteOff(spools, keys[pitch]);
+                        isKeyOn[pitch] = 0;
+                    } else if (pedalFlag == 1) {
+                        isKeyOn[pitch] = 2;  //페달 밟은 상태로 건반 뗐을 때
+                        relNote.push(pitch);
+                    }
                 }
             }
         }
