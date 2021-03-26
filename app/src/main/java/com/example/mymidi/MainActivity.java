@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     TextView myData, tv_byte;
     Button btn;     //임시 버튼
 
+    int testValue=0;
+
 
     static SoundPool spools;  // spool은 건반 1개당 1개씩 필요하므로 실제론 88개가 필요함.<배열로 정의 가능
     static int keys[];          // spool에 할당된 오디오 파일을 구분할 키값
@@ -77,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                                             runOnUiThread(new Runnable(){
                                                 @Override
                                                 public void run(){
-                                                    btn.setText("Device Connected");
+                                                    btn.setText("Device connected");
                                                 }
                                             });
                                         }
@@ -91,13 +93,15 @@ public class MainActivity extends AppCompatActivity {
             }
             public void onDeviceRemoved( MidiDeviceInfo info ) { // 장치 연결 해제 알림
                 Toast.makeText(getApplicationContext(),"device removed", Toast.LENGTH_SHORT).show();
-                new Thread(new Runnable(){/////////////////////(중요) 쓰레드 내에서 UI 작업하는 기능 !!!!!!!!!
+
+               new Thread(new Runnable(){/////////////////////(중요) 쓰레드 내에서 UI 작업하는 기능 !!!!!!!!!
                     @Override
                     public void run() {
                         runOnUiThread(new Runnable(){
                             @Override
                             public void run(){
-                                btn.setText("Device Disconnected");
+                                btn.setText("Device Disconnected : "+testValue);
+                                testValue+=1;
                             }
                         });
                     }

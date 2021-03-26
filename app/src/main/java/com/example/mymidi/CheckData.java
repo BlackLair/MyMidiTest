@@ -1,9 +1,13 @@
 package com.example.mymidi;
 
+import android.app.Activity;
+import android.content.Context;
 import android.media.SoundPool;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.Stack;
+import java.util.logging.Handler;
 
 public class CheckData {
     static int pedalFlag=0;           // 0 : 페달 뗌   1 : 페달 밟음
@@ -15,7 +19,6 @@ public class CheckData {
     public static void CheckNote(String receivedDataString, SoundPool spools, int[] keys){
         int pitch;
         float velocity;
-
         if(initFlag==0){
             for(int i=0; i<89; i++)
                 isKeyOn[i]=0;
@@ -56,9 +59,7 @@ public class CheckData {
                     } else if (isKeyOn[pitch] == 0) {
                         PlayNote.noteOn(spools, keys[pitch], velocity);
                         isKeyOn[pitch] = 1;
-
                     }
-
                 } else if (receivedDataString.substring(0, 3).equals("018")) { //건반 뗐을 때
                     if (pedalFlag == 0) {
                         PlayNote.noteOff(spools, keys[pitch]);
