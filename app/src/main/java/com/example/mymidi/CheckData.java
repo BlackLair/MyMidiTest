@@ -1,6 +1,7 @@
 package com.example.mymidi;
 
 import android.media.SoundPool;
+import android.widget.Button;
 
 import java.util.Stack;
 
@@ -10,7 +11,6 @@ public class CheckData {
     static int initFlag=0;
     static Stack<Integer> relNote = new Stack<>();
     static String testString; // test 버튼 출력용
-
 
     public static void CheckNote(String receivedDataString, SoundPool spools, int[] keys){
         int pitch;
