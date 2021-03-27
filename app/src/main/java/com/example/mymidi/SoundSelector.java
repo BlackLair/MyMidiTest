@@ -134,10 +134,8 @@ public class SoundSelector extends AppCompatActivity {
         }
 
 
-    public static void unLoad(SoundPool[] spools, int[] keys, int selected, Context context){
-        for(int i=0; i<88; i++){
-            spools[i].release();
-            spools[i]=null;
-        }
+    public static void unLoad(SoundPool spools, int[] keys, int selected, Context context){
+        spools.release();
+        spools=null;
     }
 }

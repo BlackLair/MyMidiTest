@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Toast.makeText(context_main, "디바이스 콜백 해제", Toast.LENGTH_SHORT).show();
                 m.unregisterDeviceCallback(myMidiCallback); // 디바이스 콜백 해제
+                SoundSelector.unLoad(spools, keys, 0, context_main);
             }
         });
     }
