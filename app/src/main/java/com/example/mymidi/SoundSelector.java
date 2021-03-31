@@ -15,11 +15,7 @@ public class SoundSelector extends AppCompatActivity {
         SoundPool spools;
 
         for (int i = 0; i < 88; i++) {
-
-            if(i<9)
-                myIds[i]=context.getResources().getIdentifier("@raw/p"+"0"+Integer.toString(i+1),"raw",context.getPackageName());
-            else
-                myIds[i]=context.getResources().getIdentifier("@raw/p"+Integer.toString(i+1),"raw",context.getPackageName());
+            myIds[i]=context.getResources().getIdentifier("@raw/p"+Integer.toString(i),"raw",context.getPackageName());
         }
 
 
@@ -33,7 +29,7 @@ public class SoundSelector extends AppCompatActivity {
         } else {                // API 21 미만
                 spools = new SoundPool(256, AudioManager.STREAM_NOTIFICATION, 0);
         }
-
+//
 
 
 
