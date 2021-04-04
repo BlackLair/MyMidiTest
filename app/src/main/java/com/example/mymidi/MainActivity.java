@@ -1,6 +1,7 @@
 package com.example.mymidi;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -51,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
         btn=findViewById(R.id.btn);
         btn2=findViewById(R.id.btn_unregister);
         context_main=this;
-
         keys= new int[88];
 
         spools=SoundSelector.load(keys,0,context_main );
@@ -71,6 +71,10 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(context_main, "디바이스 콜백 해제", Toast.LENGTH_SHORT).show();
                 m.unregisterDeviceCallback(myMidiCallback); // 디바이스 콜백 해제
                 SoundSelector.unLoad(spools, keys, 0, context_main);
+                myMidiCallback.disConnect();
+                Intent intent = new Intent(MainActivity.this, SubActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }
