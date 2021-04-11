@@ -26,4 +26,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/btn_unregister"
         android:text="디바이스콜백해제"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/stopthread"
+        android:text="스레드종료"/>
 </LinearLayout>
