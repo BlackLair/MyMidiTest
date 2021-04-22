@@ -25,6 +25,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.example.mymidi.CheckData.isKeyOn;
+
 
 public class MainActivity extends AppCompatActivity {
     static final String TAG = "mymidi";
@@ -54,6 +56,10 @@ public class MainActivity extends AppCompatActivity {
         btn2=findViewById(R.id.btn_unregister);
         context_main=this;
         keys= new int[88];
+
+        for(int i=0; i<89; i++)
+            isKeyOn[i]=0;
+
 
         flag.set(true);
         spools=SoundSelector.load(keys,0,context_main );

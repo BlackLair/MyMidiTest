@@ -19,11 +19,11 @@ public class CheckData {
     public static void CheckNote(String receivedDataString, SoundPool spools, int[] keys){
         int pitch;
         float velocity;
-        if(initFlag==0){
+ /*       if(initFlag==0){
             for(int i=0; i<89; i++)
                 isKeyOn[i]=0;
             initFlag=1;
-        }
+        }*/
 
         pitch=getPitch(receivedDataString);
         velocity=getVelocity(receivedDataString);
@@ -31,23 +31,9 @@ public class CheckData {
         testString=receivedDataString; // 테스트 출력용
 
 
-        if(receivedDataString.substring(0,3).equals("01b")) {   //페달 신호
-            if (receivedDataString.substring(0, 8).equals("01b0407f")) { // 페달 밟았을 때
-                pedalFlag = 1;
-            } else if (receivedDataString.substring(0, 8).equals("01b04000")) { //페달 뗐을 때
-                pedalFlag = 0;
-                while(!relNote.empty()){
-                    int pit=relNote.pop();
-                    if(isKeyOn[pit]!=1) { // 페달 밟는 중 두 번째 눌려있는 상태의 건반은 소리를 지속시키기 위함.
-                        isKeyOn[pit] = 0;
-                        PlayNote.noteOff(spools, keys[pit]);
-                    }
-                }
-            }
-        }
 
-        else {                      //건반 신호
-            if (pitch < 88 && pitch >=0) {
+                     //건반 신호
+            if (!(receivedDataString.substring(0,3).equals("01b")) && pitch < 88 && pitch >=0) {
                 if (receivedDataString.substring(0, 3).equals("019")) { // 건반 눌렀을 때
     /*                if (isKeyOn[pitch] == 2) {
                         PlayNote.noteOff(spools, keys[pitch]);
@@ -73,6 +59,19 @@ public class CheckData {
                         relNote.push(pitch);
                     }
                 }
+            }
+            else {   //페달 신호
+                if (receivedDataString.substring(6, 8).equals("7f")) { // 페달 밟았을 때
+                    pedalFlag = 1;
+                } else  { //페달 뗐을 때
+                    pedalFlag = 0;
+                    while(!relNote.empty()){
+                        int pit=relNote.pop();
+                        if(isKeyOn[pit]!=1) { // 페달 밟는 중 두 번째 눌려있는 상태의 건반은 소리를 지속시키기 위함.
+                            isKeyOn[pit] = 0;
+                            PlayNote.noteOff(spools, keys[pit]);
+                        }
+                    }
             }
         }
 
