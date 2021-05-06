@@ -1,5 +1,7 @@
 package com.example.mymidi;
 
+import android.app.Activity;
+import android.content.Context;
 import android.media.SoundPool;
 
 public class PlayNote {
@@ -10,6 +12,5 @@ public class PlayNote {
     public static void noteOff(SoundPool spool, int key){
 
         spool.stop(streamID[key]);
-
     }
 }

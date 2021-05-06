@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     static MidiManager m;
     MidiOutputPort outputPort;
     TextView myData, tv_byte;
-    Button btn, btn2;     //임시 버튼
+    public Button btn, btn2;     //임시 버튼
     public static Context context_main;
     Button stopthread;
 
