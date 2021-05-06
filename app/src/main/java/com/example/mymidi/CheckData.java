@@ -26,11 +26,11 @@ public class CheckData {
         float velocity;
         int status;
         int channel;
- /*       if(initFlag==0){
-            for(int i=0; i<89; i++)
-                isKeyOn[i]=0;
-            initFlag=1;
-        }*/
+
+        Log.i("1번째 바이트 : ", Integer.toBinaryString(Byte.toUnsignedInt(data[0])).replace(" ", "0"));
+        Log.i("2번째 바이트 : ", Integer.toBinaryString(Byte.toUnsignedInt(data[1])).replace(" ", "0"));
+        Log.i("3번째 바이트 : ", Integer.toBinaryString(Byte.toUnsignedInt(data[2])).replace(" ", "0"));
+        Log.i("4번째 바이트 : ", Integer.toBinaryString(Byte.toUnsignedInt(data[3])).replace(" ", "0"));
         status=(Byte.toUnsignedInt(data[1])&0xf0)>>4;
         channel=Byte.toUnsignedInt(data[1])&0x0f;
         pitch=Byte.toUnsignedInt(data[2])-21;
@@ -38,10 +38,7 @@ public class CheckData {
         //velocity=velocity * (velocity+(float)0.1); // 일정 볼륨 이상은 소리크기가 비슷비슷해져서 2차함수 그래프 형식으로 볼륨크기 조절
 
         //testString=receivedDataString; // 테스트 출력용
-        Log.i("status : ",Integer.toString(status));
-        Log.i("channel : ", Integer.toString(channel));
-        Log.i("pitch : ", Integer.toString(pitch));
-        Log.i("velocity : ", Float.toString(velocity));
+
                      //건반 신호
             if ((status!=11) && pitch < 88 && pitch >=0) {
                 if (status==9) { // 건반 눌렀을 때
